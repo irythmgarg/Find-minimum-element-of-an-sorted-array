@@ -1,0 +1,62 @@
+#include <vector>
+#include <climits>
+using namespace std;
+
+/**
+ * Class to find the minimum element in a rotated sorted array.
+ * 
+ * Theory:
+ * - A rotated sorted array is created by taking a sorted array and rotating it at some pivot.
+ * - The minimum element in the array is the point where the rotation occurs.
+ * - Binary search is used to efficiently find this minimum element.
+ * 
+ * Key Observations:
+ * - If the array is not rotated, the first element is the smallest.
+ * - The array is divided into two halves during each iteration of binary search:
+ *   - If the left half [s, mid] is sorted, the minimum must be in this range.
+ *   - Otherwise, the minimum lies in the right half.
+ * 
+ * Algorithm:
+ * 1. Initialize `ans` to `INT_MAX` to store the minimum element found so far.
+ * 2. Use binary search to iterate over the array:
+ *    - If the left half is sorted, the minimum is the first element of the left half.
+ *    - Update the search range to the unsorted half.
+ * 3. Return the smallest value found during the search.
+ * 
+ * Time Complexity:
+ * - **O(log n)** in all cases, as the array is divided in half during each iteration.
+ * 
+ * Space Complexity:
+ * - **O(1)** as no extra space is used.
+ */
+class Solution {
+public:
+    /**
+     * Function to find the minimum element in a rotated sorted array.
+     * 
+     * @param nums: Reference to the rotated sorted array.
+     * @return The minimum element in the array.
+     */
+    int findMin(vector<int>& nums) {
+        int ans = INT_MAX;  // Initialize to maximum integer value
+        int s = 0;          // Start pointer
+        int e = nums.size() - 1;  // End pointer
+        
+        // Perform binary search
+        while (s <= e) {
+            int mid = (s + e) / 2;  // Calculate the middle index
+            
+            // Case 1: Left half [s, mid] is sorted
+            if (nums[s] <= nums[mid]) {
+                ans = min(ans, nums[s]);  // Update the minimum value
+                s = mid + 1;             // Search in the right half
+            } 
+            // Case 2: Right half [mid, e] is unsorted
+            else {
+                ans = min(ans, nums[mid]);  // Update the minimum value
+                e = mid - 1;               // Search in the left half
+            }
+        }
+        return ans;  // Return the minimum element
+    }  
+};
